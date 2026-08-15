@@ -1,0 +1,60 @@
+name: Sign Firefox package
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing GitHub release tag to attach the signed XPI to
+        required: true
+        default: v3.1.0
+
+permissions:
+  contents: write
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm compile
+      - run: pnpm zip:firefox
+
+      - name: Check AMO signing credentials
+        env:
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+        run: |
+          test -n "$FIREFOX_JWT_ISSUER" || { echo 'FIREFOX_JWT_ISSUER is missing'; exit 1; }
+          test -n "$FIREFOX_JWT_SECRET" || { echo 'FIREFOX_JWT_SECRET is missing'; exit 1; }
+
+      - name: Obtain an unlisted Mozilla signature
+        env:
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+        run: |
+          mkdir -p .output/signed
+          pnpm dlx web-ext sign \
+            --source-dir .output/firefox-mv3 \
+            --artifacts-dir .output/signed \
+            --channel unlisted \
+            --api-key "$FIREFOX_JWT_ISSUER" \
+            --api-secret "$FIREFOX_JWT_SECRET" \
+            --upload-source-code .output/*-sources.zip \
+            --approval-timeout 600000
+
+      - name: Attach signed XPI to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ inputs.tag }}" .output/signed/*.xpi --clobber
