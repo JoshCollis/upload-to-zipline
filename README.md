@@ -1,9 +1,8 @@
-# Upload to Zipline
+# 3p.rs Share
 
-A browser extension that uploads media to Zipline directly from the right-click menu, with optional URL shortening, auto-delete, and view-count limits — all configurable from the toolbar popup.
+A Firefox/Chromium extension forked from Upload to Zipline. Clicking its toolbar icon shortens the active HTTP(S) tab with Zipline and immediately copies the returned URL. It also retains right-click media uploads and link shortening.
 
-[![Firefox Extension ](https://img.shields.io/amo/v/upload-to-zipline?label=Firefox%20Add-on&logo=firefox&color=orange)](https://addons.mozilla.org/en-US/firefox/addon/upload-to-zipline/)
-[![Chrome Extension](https://img.shields.io/chrome-web-store/v/ngeeifojlejglmpkclhkopklbjkmlmdo?label=Chrome%20Web%20Store&logo=googlechrome&color=blue)](https://chromewebstore.google.com/detail/upload-to-zipline/ngeeifojlejglmpkclhkopklbjkmlmdo)
+Based on [jakedev796/upload-to-zipline](https://github.com/jakedev796/upload-to-zipline) and distributed under GPL-3.0.
 
 <p align="center">
   <img src="upload-to-zipline.png" alt="Upload to Zipline options page" width="420" />
@@ -12,7 +11,7 @@ A browser extension that uploads media to Zipline directly from the right-click 
 ## Features
 
 - Right-click any image, video, or audio → upload to your Zipline instance
-- Toolbar icon opens a settings popup
+- Toolbar icon shortens the current tab and copies the returned URL in one action
 - Right-click any link → "Shorten URL with Zipline" (optional)
 - Auto-delete uploads after a configurable expiry (1h to 1y)
 - Per-upload max view-count limit
@@ -21,12 +20,14 @@ A browser extension that uploads media to Zipline directly from the right-click 
 
 ## Configuration
 
-1. Click the extension's toolbar icon to open the popup (or right-click → Manage Extension → Options for the full-page version).
+1. Open the extension's preferences from the browser's extension manager. If it is not configured yet, the first toolbar click opens preferences automatically.
 2. **Request URL** — your Zipline upload endpoint, e.g. `https://your-zipline-instance.com/api/upload`.
 3. **Authorization Token** — your personal Zipline auth token.
 4. Toggle and configure any of the **Upload Options**: auto-delete expiry, max-views limit.
 5. Toggle **Right-click URL shortening** in **Context Menu** if you want the link-shortening menu item.
 6. Click **Save Settings**.
+
+After setup, click the extension toolbar icon on any normal HTTP or HTTPS page. The current page is shortened and the result is copied without opening a popup.
 
 > The request URL and auth token can both be copied from your Zipline account's `.sxcu` ShareX export.
 
