@@ -1,7 +1,7 @@
 {
-  "name": "upload-to-zipline",
+  "name": "3prs-share",
   "private": true,
-  "version": "3.0.1",
+  "version": "3.1.0",
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
@@ -12,13 +12,15 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "vue-tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.4",
     "@wxt-dev/module-vue": "^1.0.3",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
     "vue-tsc": "^3.2.7",
     "wxt": "^0.20.25"
   },

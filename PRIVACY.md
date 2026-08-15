@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Upload to Zipline ("the extension") is a browser extension that uploads media files and shortens URLs through a user-configured Zipline instance.
+3p.rs Share ("the extension") is a browser extension that uploads media files and shortens URLs through a user-configured Zipline instance.
 
 ## What data the extension stores
 
@@ -24,14 +24,14 @@ The extension does not collect analytics, telemetry, crash reports, or any other
 ## What the extension does NOT do
 
 - It does not access your browsing history.
-- It does not read page content (it only acts on the specific image, video, audio, or link you right-click).
-- It does not run on any tab unless you trigger a context-menu action.
+- It does not read page content. A toolbar click reads only the active tab's URL; context-menu actions use only the specific image, video, audio, or link you selected.
+- It does not run on a tab unless you trigger the toolbar or a context-menu action.
 - It does not transmit your authorization token anywhere except to the Zipline server you explicitly configured.
 
 ## Source code
 
-The extension is open source under GPL-3.0. You can review the entirety of the code at <https://github.com/jakedev796/upload-to-zipline>.
+The extension is open source under GPL-3.0. You can review the entirety of the code at <https://github.com/JoshCollis/upload-to-zipline>.
 
 ## Contact
 
-For questions about this policy, open an issue at <https://github.com/jakedev796/upload-to-zipline/issues>.
+For questions about this policy, open an issue at <https://github.com/JoshCollis/upload-to-zipline/issues>.

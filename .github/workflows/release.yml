@@ -31,6 +31,7 @@ jobs:
             exit 1
           fi
 
+      - run: pnpm test
       - run: pnpm compile
       - run: pnpm build
       - run: pnpm build:firefox
@@ -41,17 +42,15 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            .output/upload-to-zipline-*-chrome.zip
-            .output/upload-to-zipline-*-firefox.zip
-            .output/upload-to-zipline-*-sources.zip
+            .output/3prs-share-*-chrome.zip
+            .output/3prs-share-*-firefox.zip
+            .output/3prs-share-*-sources.zip
           generate_release_notes: true
           fail_on_unmatched_files: true
           body: |
             ## Store availability
 
-            This release has been submitted to the Chrome Web Store and Firefox AMO.
-            Updates typically take a few hours (Chrome) or hours-to-days (Firefox) to
-            clear store review and propagate to installed browsers.
+            Store submission runs only when the corresponding signing credentials are configured.
 
             Direct downloads of the build artifacts are attached below.
 
@@ -66,8 +65,8 @@ jobs:
             exit 0
           fi
           pnpm wxt submit \
-            --firefox-zip .output/upload-to-zipline-*-firefox.zip \
-            --firefox-sources-zip .output/upload-to-zipline-*-sources.zip
+            --firefox-zip .output/3prs-share-*-firefox.zip \
+            --firefox-sources-zip .output/3prs-share-*-sources.zip
 
       - name: Submit to Chrome Web Store
         env:
@@ -81,4 +80,4 @@ jobs:
             exit 0
           fi
           pnpm wxt submit \
-            --chrome-zip .output/upload-to-zipline-*-chrome.zip
+            --chrome-zip .output/3prs-share-*-chrome.zip

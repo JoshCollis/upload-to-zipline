@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS, IMAGE_FORMATS, type ImageFormat } from '@/types/settings';
+import { handleToolbarClick } from '@/lib/toolbarAction';
 
 const CONVERTIBLE_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const IMAGE_TYPE_TO_EXTENSION: Record<string, string> = {
@@ -10,6 +11,24 @@ const IMAGE_TYPE_TO_EXTENSION: Record<string, string> = {
 const IMAGE_FORMAT_VALUES = new Set<string>(IMAGE_FORMATS.map((format) => format.value));
 
 export default defineBackground(() => {
+  void browser.action.setPopup({ popup: '' });
+  browser.action.onClicked.addListener(async (tab) => {
+    try {
+      const result = await handleToolbarClick(tab, shortenURL);
+      if (result === 'unsupported') {
+        showNotification(
+          'Cannot Shorten This Page',
+          'Open a normal HTTP or HTTPS page, then click the toolbar button again.'
+        );
+      }
+    } catch (err) {
+      console.error('Current-tab shortening failed:', err);
+      showNotification(
+        'Shorten Failed',
+        'An error occurred while shortening the current tab. Please check your settings and try again.'
+      );
+    }
+  });
   browser.runtime.onInstalled.addListener(createContextMenu);
   browser.runtime.onStartup.addListener(createContextMenu);
   browser.runtime.onMessage.addListener((msg) => {
@@ -140,11 +159,7 @@ async function copyToClipboard(text: string, tabId: number): Promise<boolean> {
   try {
     await browser.scripting.executeScript({
       target: { tabId },
-      func: (textToCopy: string) => {
-        navigator.clipboard.writeText(textToCopy).catch((err) =>
-          console.error('Failed to copy to clipboard:', err)
-        );
-      },
+      func: (textToCopy: string) => navigator.clipboard.writeText(textToCopy),
       args: [text],
     });
     return true;
